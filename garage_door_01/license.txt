@@ -1,0 +1,11 @@
+Model Information:
+* title:	Garage Door 01
+* source:	https://sketchfab.com/3d-models/garage-door-01-fb7a0e3b6cf348f48831a80e49054609
+* author:	Trueno (https://sketchfab.com/astate)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Garage Door 01" (https://sketchfab.com/3d-models/garage-door-01-fb7a0e3b6cf348f48831a80e49054609) by Trueno (https://sketchfab.com/astate) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

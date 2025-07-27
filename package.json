@@ -1,0 +1,32 @@
+{
+  "name": "galvanix-website",
+  "version": "1.0.0",
+  "description": "A 3D Three.js website for Galvanix premium garage doors",
+  "main": "index.html",
+  "scripts": {
+    "start": "http-server -p 8000 -o",
+    "dev": "http-server -p 8000 -o -c-1",
+    "build": "echo 'No build process needed for static site'"
+  },
+  "keywords": [
+    "threejs",
+    "3d",
+    "garage-door",
+    "webgl",
+    "animation"
+  ],
+  "author": "Galvanix",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/galvanix-website.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/galvanix-website/issues"
+  },
+  "homepage": "https://github.com/your-username/galvanix-website#readme"
+} 
