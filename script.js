@@ -24,40 +24,37 @@ function init() {
 
 // Setup Three.js scene
 function setupScene() {
-  // Scene
-  scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x0f172a);
-
-  // Camera
-  camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-  );
-  camera.position.set(0, 0, 25); // Adjusted for model positioned closer
-
-  // Renderer
-  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  renderer.outputEncoding = THREE.sRGBEncoding;
-
-  document.getElementById("scene-container").appendChild(renderer.domElement);
-
-  // Controls
-  controls = new THREE.OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.05;
-  controls.enableZoom = false;
-  controls.enablePan = false;
-  controls.autoRotate = false; // Disable auto-rotation for static door
-  controls.enableRotate = false; // Disable manual rotation
-
-  // Handle window resize
-  window.addEventListener("resize", onWindowResize);
+    // Scene
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0f172a);
+    
+    // Camera
+    const isMobile = window.innerWidth <= 768;
+    const cameraDistance = isMobile ? 35 : 25; // Further back on mobile
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 0, cameraDistance);
+    
+    // Renderer
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for mobile performance
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    
+    document.getElementById("scene-container").appendChild(renderer.domElement);
+    
+    // Controls
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.enableZoom = false;
+    controls.enablePan = false;
+    controls.autoRotate = false; // Disable auto-rotation for static door
+    controls.enableRotate = false; // Disable manual rotation
+    
+    // Handle window resize
+    window.addEventListener("resize", onWindowResize);
 }
 
 // Setup lighting
@@ -101,8 +98,16 @@ function loadSketchfabGarageDoor() {
       garageDoor = gltf.scene;
 
       // Scale and position the model appropriately - closer to camera
-      garageDoor.scale.set(25, 25, 25); // Much larger scale to fill screen
-      garageDoor.position.set(0, -10, 5); // Move down and closer to camera
+      const isMobile = window.innerWidth <= 768;
+      const scale = isMobile ? 15 : 25; // Much smaller scale on mobile to zoom out
+      garageDoor.scale.set(scale, scale, scale);
+      
+      // Position model differently for mobile vs desktop
+      if (isMobile) {
+          garageDoor.position.set(0, -5, 10); // Further back and higher for mobile
+      } else {
+          garageDoor.position.set(0, -10, 5); // Original position for desktop
+      }
 
       // Enable shadows for all meshes
       garageDoor.traverse((child) => {
@@ -294,22 +299,46 @@ function animateGarageDoor() {
 
 // Animate camera position
 function animateCamera() {
-  // Camera moves back and slightly up as user scrolls
-  const targetY = 0 + scrollPercent * 3;
-  const targetZ = 25 + scrollPercent * 8;
-
-  camera.position.y += (targetY - camera.position.y) * 0.05;
-  camera.position.z += (targetZ - camera.position.z) * 0.05;
-
-  // Look at the center of the garage door
-  camera.lookAt(0, -3, 5);
+    const isMobile = window.innerWidth <= 768;
+    const baseDistance = isMobile ? 35 : 25;
+    
+    // Camera moves back and slightly up as user scrolls
+    const targetY = 0 + scrollPercent * 3;
+    const targetZ = baseDistance + scrollPercent * 8;
+    
+    camera.position.y += (targetY - camera.position.y) * 0.05;
+    camera.position.z += (targetZ - camera.position.z) * 0.05;
+    
+    // Look at the center of the garage door
+    const lookAtY = isMobile ? -5 : 0;
+    camera.lookAt(0, lookAtY, 5);
 }
 
 // Handle window resize
 function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    
+    // Adjust pixel ratio for mobile performance
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    
+    // Adjust camera distance based on screen size
+    const isMobile = window.innerWidth <= 768;
+    const cameraDistance = isMobile ? 35 : 25;
+    camera.position.z = cameraDistance;
+    
+    // Update model scale and position if it's loaded
+    if (garageDoor && isLoaded) {
+        const scale = isMobile ? 15 : 25;
+        garageDoor.scale.set(scale, scale, scale);
+        
+        if (isMobile) {
+            garageDoor.position.set(0, -5, 10);
+        } else {
+            garageDoor.position.set(0, -10, 5);
+        }
+    }
 }
 
 // Animation loop

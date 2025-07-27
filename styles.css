@@ -101,12 +101,13 @@ body {
     width: 100vw;
     height: 100vh;
     position: relative;
-    overflow: hidden;
+    overflow: visible; /* Changed from hidden to visible */
 }
 
 .hero-content {
     text-align: center;
     max-width: 800px;
+    width: 90%;
     opacity: 0;
     transform: translateY(50px);
     animation: fadeInUp 1s ease-out 0.5s forwards;
@@ -115,6 +116,10 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .logo-container {
@@ -126,6 +131,12 @@ body {
     box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
     position: relative;
     z-index: 15;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }
 
 .company-logo {
@@ -137,8 +148,12 @@ body {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     letter-spacing: 0.15em;
+    line-height: 1.1;
+    text-align: center;
+    width: 100%;
 }
 
+/* Base tagline styles */
 .tagline {
     font-size: 1rem;
     color: #E5E7EB;
@@ -146,7 +161,18 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.08em;
     line-height: 1.4;
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+    width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    padding: 0 1rem;
 }
+
+/* Mobile/Desktop tagline visibility - REMOVED - using single responsive tagline */
+
+/* Responsive tagline styles - REMOVED - using comprehensive hero content scaling above */
 
 /* About Section */
 #about {
@@ -355,19 +381,18 @@ body {
     width: 100%;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid #E5E7EB;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     z-index: 100;
-    opacity: 1;
-    transform: translateY(0);
+    transition: all 0.3s ease;
 }
 
 .header-content {
-    max-width: 1440px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 1rem 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
 }
 
 .header-logo span {
@@ -382,7 +407,7 @@ body {
 }
 
 .header-nav a {
-    color: #4C4C4C;
+    color: #1e293b;
     text-decoration: none;
     font-weight: 500;
     transition: color 0.3s ease;
@@ -462,9 +487,72 @@ body {
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+    .hero-content {
+        width: 95%;
+        max-width: 700px;
+    }
+    
+    .company-logo {
+        font-size: 3rem;
+    }
+    
+    .logo-container {
+        padding: 2rem;
+    }
+}
+
+/* Mobile-specific hero layout */
 @media (max-width: 768px) {
+    .hero-content {
+        width: 95%;
+        max-width: 600px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    
     .company-logo {
         font-size: 2.5rem;
+        letter-spacing: 0.1em;
+        text-align: center;
+        width: 100%;
+    }
+    
+    /* Removed conflicting .tagline rule - using responsive tagline system above */
+    
+    .logo-container {
+        padding: 1.5rem;
+        border-radius: 12px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: auto;
+    }
+    
+    .header-content {
+        padding: 1rem;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+    
+    .header-logo {
+        flex: 1;
+        text-align: left;
+    }
+    
+    .header-nav {
+        display: flex;
+        gap: 1rem;
+        flex: 1;
+        justify-content: flex-end;
     }
     
     .about-grid,
@@ -497,38 +585,163 @@ body {
         font-size: 2rem;
     }
     
-    .logo-container {
-        padding: 2rem;
+    /* Improve 3D scene for mobile */
+    #scene-container {
+        height: 100vh;
+    }
+}
+
+/* Mobile-specific compact layout - REMOVED - using new tagline system above */
+
+/* Very small mobile screens - REMOVED - using new tagline system above */
+
+/* Landscape orientation for mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero-content {
+        top: 60%;
     }
     
-    .header-content {
+    .company-logo {
+        font-size: 1.5rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    /* Removed conflicting .tagline rule - using responsive tagline system above */
+    
+    .logo-container {
         padding: 1rem;
+    }
+} 
+
+/* Header styles for mobile */
+@media (max-width: 360px) {
+    .header-content {
+        padding: 0.5rem 0.75rem;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .header-logo span {
+        font-size: 1.1rem;
     }
     
     .header-nav {
-        display: none;
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .header-nav a {
+        font-size: 0.8rem;
+    }
+} 
+
+/* Mobile-specific hero content - REMOVED - using tagline switching instead */ 
+
+/* Responsive hero content styles */
+@media (max-width: 600px) {
+    .hero-content {
+        width: 95%;
+        max-width: 500px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+    
+    .company-logo {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .tagline {
+        font-size: 0.8rem;
+        letter-spacing: 0.06em;
+        max-width: 300px;
+        padding: 0 0.5rem;
+    }
+    
+    .logo-container {
+        padding: 2rem;
+        max-width: 100%;
     }
 }
 
 @media (max-width: 480px) {
+    .hero-content {
+        width: 90%;
+        max-width: 400px;
+        left: 45%; /* Move to the left when content doesn't fit */
+        transform: translateX(-50%);
+    }
+    
     .company-logo {
         font-size: 2rem;
+        margin-bottom: 0.4rem;
     }
     
     .tagline {
-        font-size: 1rem;
+        font-size: 0.7rem;
+        letter-spacing: 0.04em;
+        max-width: 250px;
+        padding: 0 0.25rem;
+        line-height: 1.2;
     }
     
-    .about-content h2,
-    .contact-content h2 {
+    .logo-container {
+        padding: 1.5rem;
+        max-width: 90vw;
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+@media (max-width: 360px) {
+    .hero-content {
+        width: 95%;
+        max-width: 350px;
+        left: 40%; /* Move further left on smaller screens */
+        transform: translateX(-50%);
+    }
+    
+    .company-logo {
         font-size: 1.5rem;
+        margin-bottom: 0.3rem;
     }
     
-    .feature {
-        padding: 1.5rem;
+    .tagline {
+        font-size: 0.6rem;
+        letter-spacing: 0.03em;
+        max-width: 200px;
+        line-height: 1.1;
     }
     
-    .contact-form {
-        padding: 1.5rem;
+    .logo-container {
+        padding: 1.2rem;
+        max-width: 95vw;
+    }
+}
+
+@media (max-width: 320px) {
+    .hero-content {
+        width: 98%;
+        max-width: 300px;
+        left: 35%; /* Move even further left on very small screens */
+        transform: translateX(-50%);
+    }
+    
+    .company-logo {
+        font-size: 1.3rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .tagline {
+        font-size: 0.55rem;
+        letter-spacing: 0.02em;
+        max-width: 180px;
+        line-height: 1.0;
+    }
+    
+    .logo-container {
+        padding: 1rem;
+        max-width: 98vw;
     }
 } 
