@@ -24,37 +24,42 @@ function init() {
 
 // Setup Three.js scene
 function setupScene() {
-    // Scene
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0f172a);
-    
-    // Camera
-    const isMobile = window.innerWidth <= 768;
-    const cameraDistance = isMobile ? 35 : 25; // Further back on mobile
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 0, cameraDistance);
-    
-    // Renderer
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for mobile performance
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    renderer.outputEncoding = THREE.sRGBEncoding;
-    
-    document.getElementById("scene-container").appendChild(renderer.domElement);
-    
-    // Controls
-    controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-    controls.enableZoom = false;
-    controls.enablePan = false;
-    controls.autoRotate = false; // Disable auto-rotation for static door
-    controls.enableRotate = false; // Disable manual rotation
-    
-    // Handle window resize
-    window.addEventListener("resize", onWindowResize);
+  // Scene
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0f172a);
+
+  // Camera
+  const isMobile = window.innerWidth <= 768;
+  const cameraDistance = isMobile ? 35 : 25; // Further back on mobile
+  camera = new THREE.PerspectiveCamera(
+    75,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
+  camera.position.set(0, 0, cameraDistance);
+
+  // Renderer
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for mobile performance
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.outputEncoding = THREE.sRGBEncoding;
+
+  document.getElementById("scene-container").appendChild(renderer.domElement);
+
+  // Controls
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05;
+  controls.enableZoom = false;
+  controls.enablePan = false;
+  controls.autoRotate = false; // Disable auto-rotation for static door
+  controls.enableRotate = false; // Disable manual rotation
+
+  // Handle window resize
+  window.addEventListener("resize", onWindowResize);
 }
 
 // Setup lighting
@@ -101,12 +106,12 @@ function loadSketchfabGarageDoor() {
       const isMobile = window.innerWidth <= 768;
       const scale = isMobile ? 15 : 25; // Much smaller scale on mobile to zoom out
       garageDoor.scale.set(scale, scale, scale);
-      
+
       // Position model differently for mobile vs desktop
       if (isMobile) {
-          garageDoor.position.set(0, -5, 10); // Further back and higher for mobile
+        garageDoor.position.set(0, -5, 10); // Further back and higher for mobile
       } else {
-          garageDoor.position.set(0, -10, 5); // Original position for desktop
+        garageDoor.position.set(0, -10, 5); // Original position for desktop
       }
 
       // Enable shadows for all meshes
@@ -135,6 +140,9 @@ function loadSketchfabGarageDoor() {
           }
         }
       });
+
+      // Add GALVANIX text to the garage door
+      addGalvanixTextToDoor();
 
       scene.add(garageDoor);
       isLoaded = true;
@@ -189,6 +197,61 @@ function createFallbackAnimation() {
   }
 }
 
+// Add GALVANIX text to the garage door
+function addGalvanixTextToDoor() {
+  // Create a canvas for the text texture
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+  canvas.width = 512;
+  canvas.height = 128;
+
+  // Set background to transparent
+  context.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Create gradient for text
+  const gradient = context.createLinearGradient(0, 0, canvas.width, 0);
+  gradient.addColorStop(0, "#6366f1");
+  gradient.addColorStop(1, "#8b5cf6");
+
+  // Set text properties
+  context.font = "bold 48px Inter, sans-serif";
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  context.fillStyle = gradient;
+  context.strokeStyle = "#ffffff";
+  context.lineWidth = 2;
+
+  // Add text with stroke for better visibility
+  context.strokeText("GALVANIX", canvas.width / 2, canvas.height / 2);
+  context.fillText("GALVANIX", canvas.width / 2, canvas.height / 2);
+
+  // Create texture from canvas
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+
+  // Create plane geometry for the text
+  const textGeometry = new THREE.PlaneGeometry(8, 2);
+  const textMaterial = new THREE.MeshBasicMaterial({
+    map: texture,
+    transparent: true,
+    alphaTest: 0.1,
+  });
+
+  const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+
+  // Position the text on the garage door (adjust these values as needed)
+  textMesh.position.set(0, 2, 0.1); // Slightly in front of the door
+  textMesh.rotation.x = -Math.PI / 2; // Rotate to face forward
+
+  // Add the text to the garage door so it moves with it
+  garageDoor.add(textMesh);
+
+  // Store reference to text for potential animation
+  garageDoor.userData.galvanixText = textMesh;
+
+  console.log("GALVANIX text added to garage door");
+}
+
 // Create a fallback garage door if the model fails to load
 function createFallbackGarageDoor() {
   console.log("Creating fallback garage door...");
@@ -232,8 +295,63 @@ function createFallbackGarageDoor() {
     scene.add(panel);
   }
 
+  // Add GALVANIX text to the fallback garage door
+  addGalvanixTextToFallbackDoor();
+
   isLoaded = true;
   console.log("Fallback garage door created with", panelCount, "panels");
+}
+
+// Add GALVANIX text to the fallback garage door
+function addGalvanixTextToFallbackDoor() {
+  // Create a canvas for the text texture
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+  canvas.width = 512;
+  canvas.height = 128;
+
+  // Set background to transparent
+  context.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Create gradient for text
+  const gradient = context.createLinearGradient(0, 0, canvas.width, 0);
+  gradient.addColorStop(0, "#6366f1");
+  gradient.addColorStop(1, "#8b5cf6");
+
+  // Set text properties
+  context.font = "bold 48px Inter, sans-serif";
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  context.fillStyle = gradient;
+  context.strokeStyle = "#ffffff";
+  context.lineWidth = 2;
+
+  // Add text with stroke for better visibility
+  context.strokeText("GALVANIX", canvas.width / 2, canvas.height / 2);
+  context.fillText("GALVANIX", canvas.width / 2, canvas.height / 2);
+
+  // Create texture from canvas
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+
+  // Create plane geometry for the text
+  const textGeometry = new THREE.PlaneGeometry(16, 4);
+  const textMaterial = new THREE.MeshBasicMaterial({
+    map: texture,
+    transparent: true,
+    alphaTest: 0.1,
+  });
+
+  const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+
+  // Position the text on the fallback garage door
+  textMesh.position.set(0, 8, 0.1); // Position above the panels
+  textMesh.rotation.x = -Math.PI / 2; // Rotate to face forward
+
+  // Add the text to the scene
+  scene.add(textMesh);
+
+  console.log("GALVANIX text added to fallback garage door");
 }
 
 // Setup scroll listener for animations
@@ -299,46 +417,46 @@ function animateGarageDoor() {
 
 // Animate camera position
 function animateCamera() {
-    const isMobile = window.innerWidth <= 768;
-    const baseDistance = isMobile ? 35 : 25;
-    
-    // Camera moves back and slightly up as user scrolls
-    const targetY = 0 + scrollPercent * 3;
-    const targetZ = baseDistance + scrollPercent * 8;
-    
-    camera.position.y += (targetY - camera.position.y) * 0.05;
-    camera.position.z += (targetZ - camera.position.z) * 0.05;
-    
-    // Look at the center of the garage door
-    const lookAtY = isMobile ? -5 : 0;
-    camera.lookAt(0, lookAtY, 5);
+  const isMobile = window.innerWidth <= 768;
+  const baseDistance = isMobile ? 35 : 25;
+
+  // Camera moves back and slightly up as user scrolls
+  const targetY = 0 + scrollPercent * 3;
+  const targetZ = baseDistance + scrollPercent * 8;
+
+  camera.position.y += (targetY - camera.position.y) * 0.05;
+  camera.position.z += (targetZ - camera.position.z) * 0.05;
+
+  // Look at the center of the garage door
+  const lookAtY = isMobile ? -5 : 0;
+  camera.lookAt(0, lookAtY, 5);
 }
 
 // Handle window resize
 function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    
-    // Adjust pixel ratio for mobile performance
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    
-    // Adjust camera distance based on screen size
-    const isMobile = window.innerWidth <= 768;
-    const cameraDistance = isMobile ? 35 : 25;
-    camera.position.z = cameraDistance;
-    
-    // Update model scale and position if it's loaded
-    if (garageDoor && isLoaded) {
-        const scale = isMobile ? 15 : 25;
-        garageDoor.scale.set(scale, scale, scale);
-        
-        if (isMobile) {
-            garageDoor.position.set(0, -5, 10);
-        } else {
-            garageDoor.position.set(0, -10, 5);
-        }
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  // Adjust pixel ratio for mobile performance
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  // Adjust camera distance based on screen size
+  const isMobile = window.innerWidth <= 768;
+  const cameraDistance = isMobile ? 35 : 25;
+  camera.position.z = cameraDistance;
+
+  // Update model scale and position if it's loaded
+  if (garageDoor && isLoaded) {
+    const scale = isMobile ? 15 : 25;
+    garageDoor.scale.set(scale, scale, scale);
+
+    if (isMobile) {
+      garageDoor.position.set(0, -5, 10);
+    } else {
+      garageDoor.position.set(0, -10, 5);
     }
+  }
 }
 
 // Animation loop
