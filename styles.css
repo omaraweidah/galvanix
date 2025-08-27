@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -149,6 +151,7 @@ body {
 }
 
 .company-logo {
+  font-family: "Oswald", sans-serif;
   font-size: clamp(2.5rem, 6vw, 4rem);
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -332,9 +335,11 @@ body {
 }
 
 .header-logo span {
+  font-family: "Oswald", sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
   color: #1e293b;
+  letter-spacing: 0.05em;
 }
 
 .header-nav {
@@ -538,7 +543,9 @@ body {
   }
 
   .header-logo span {
+    font-family: "Oswald", sans-serif;
     font-size: 1.1rem;
+    letter-spacing: 0.05em;
   }
 
   .header-nav {
@@ -1356,6 +1363,7 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
+  margin: 15px;
 }
 
 .tech-feature {
@@ -1390,18 +1398,18 @@ body {
   margin: 0;
 }
 
-/* Color sample specific colors */
-.color-display-item[data-color="5005"] .color-sample { background: #d32f2f; }
-.color-display-item[data-color="1028"] .color-sample { background: #ff9800; }
-.color-display-item[data-color="7034"] .color-sample { background: #9e9e9e; }
-.color-display-item[data-color="1013"] .color-sample { background: #8d6e63; }
-.color-display-item[data-color="8033"] .color-sample { background: #795548; }
-.color-display-item[data-color="9016"] .color-sample { background: #fafafa; }
-.color-display-item[data-color="8005"] .color-sample { background: #cd7f32; }
-.color-display-item[data-color="3020"] .color-sample { background: #1976d2; }
-.color-display-item[data-color="7043"] .color-sample { background: #424242; }
-.color-display-item[data-color="570"] .color-sample { background: #d4af37; }
-.color-display-item[data-color="847"] .color-sample { background: #212121; }
+/* Color sample specific colors - Accurate RAL Colors */
+.color-display-item[data-color="5005"] .color-sample { background: #1E2460; } /* RAL 5005 Signal Blue */
+.color-display-item[data-color="1028"] .color-sample { background: #F5A200; } /* RAL 1028 Melon Yellow */
+.color-display-item[data-color="7034"] .color-sample { background: #8F8B66; } /* RAL 7034 Yellow Grey */
+.color-display-item[data-color="1013"] .color-sample { background: #E3D9C6; } /* RAL 1013 Oyster White */
+.color-display-item[data-color="8033"] .color-sample { background: #7D4F39; } /* RAL 8033 Clay Brown */
+.color-display-item[data-color="9016"] .color-sample { background: #F1F0EA; } /* RAL 9016 Traffic White */
+.color-display-item[data-color="8005"] .color-sample { background: #633A34; } /* RAL 8005 Fawn Brown */
+.color-display-item[data-color="3020"] .color-sample { background: #C1121C; } /* RAL 3020 Traffic Red */
+.color-display-item[data-color="7043"] .color-sample { background: #4E5754; } /* RAL 7043 Traffic Grey B */
+.color-display-item[data-color="570"] .color-sample { background: #FFCC00; } /* RAL 1003 Signal Yellow (Standard Yellow) */
+.color-display-item[data-color="847"] .color-sample { background: #1C1C1C; } /* RAL 9005 Jet Black (Graphite Black) */
 
 /* Responsive Design for Colors */
 @media (max-width: 768px) {
