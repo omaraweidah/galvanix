@@ -1,19 +1,61 @@
-// Three.js Scene Setup
 let scene, camera, renderer, controls;
 let garageDoor,
   doorPanels = [];
 let scrollPercent = 0;
 let isLoaded = false;
 
-// Initialize the application
+// Old gallery data removed since product specs section was removed
+
+// Craftsmanship gallery data
+const craftsmanshipData = {
+  '100mm': [
+    { src: 'images/100mm/Screenshot_2025-08-27_at_8_18_46_PM.png', title: 'Precision Manufacturing', description: 'Each 100mm slat is precision-engineered with foam-filled cores for maximum insulation.' },
+    { src: 'images/100mm/Screenshot_2025-08-27_at_8_19_39_PM.png', title: 'Interlocking Design', description: 'Our patented zigzag interlock system ensures superior security and weather sealing.' },
+    { src: 'images/100mm/Screenshot_2025-08-27_at_8_20_12_PM.png', title: 'Quality Assurance', description: 'Every component undergoes rigorous quality control to meet our exacting standards.' }
+  ],
+  '80mm': [
+    { src: 'images/80mm/Screenshot_2025-08-27_at_8_28_34_PM.png', title: 'Contoured Excellence', description: 'Our 80mm slats feature advanced contoured design for strength and aesthetic appeal.' },
+    { src: 'images/80mm/Screenshot_2025-08-27_at_8_28_52_PM.png', title: 'Galvanized Protection', description: 'Premium galvanized steel construction with 120 zinc coating for ultimate durability.' }
+  ],
+  'guide-rails': [
+    { src: 'images/guide-rails/Screenshot_2025-08-27_at_8_26_53_PM.png', title: 'Precision Engineering', description: 'Custom-engineered guide rails ensure smooth operation and perfect alignment.' },
+    { src: 'images/guide-rails/Screenshot_2025-08-27_at_8_27_56_PM.png', title: 'Structural Integrity', description: 'Heavy-duty construction designed to withstand years of reliable operation.' },
+    { src: 'images/guide-rails/Screenshot_2025-08-27_at_8_28_04_PM.png', title: 'Installation Excellence', description: 'Precision-fitted components for seamless installation and optimal performance.' }
+  ],
+  'end-caps': [
+    { src: 'images/end-caps/Screenshot_2025-08-27_at_8_24_58_PM.png', title: 'Precision Molding', description: 'Engineered end caps provide structural integrity and complete weather sealing.' },
+    { src: 'images/end-caps/Screenshot_2025-08-27_at_8_25_25_PM.png', title: 'Quality Materials', description: 'Premium materials ensure long-lasting performance in all weather conditions.' },
+    { src: 'images/end-caps/Screenshot_2025-08-27_at_8_25_39_PM.png', title: 'Perfect Fit', description: 'Precision-engineered for exact fit and optimal sealing performance.' }
+  ],
+  'bottom-seal': [
+    { src: 'images/bottom-seal/Screenshot_2025-08-27_at_8_25_52_PM.png', title: 'Weather Protection', description: 'Advanced sealing technology ensures complete protection from the elements.' },
+    { src: 'images/bottom-seal/Screenshot_2025-08-27_at_8_26_11_PM.png', title: 'Energy Efficiency', description: 'Superior sealing reduces energy loss and maintains optimal indoor climate.' }
+  ],
+  'misc': [
+    { src: 'images/misc/Screenshot_2025-08-27_at_8_24_05_PM.png', title: 'State-of-the-Art Facility', description: 'Our modern manufacturing facilities utilize cutting-edge technology and processes.' },
+    { src: 'images/misc/Screenshot_2025-08-27_at_8_24_38_PM.png', title: 'Quality Control', description: 'Rigorous testing and inspection ensures every component meets our standards.' },
+    { src: 'images/misc/Screenshot_2025-08-27_at_8_29_09_PM.png', title: 'Advanced Machinery', description: 'Precision manufacturing equipment delivers consistent, high-quality results.' },
+    { src: 'images/misc/Screenshot_2025-08-27_at_8_29_35_PM.png', title: 'Material Excellence', description: 'Only the finest raw materials are selected for Galvanix products.' },
+    { src: 'images/misc/Screenshot_2025-08-27_at_8_29_45_PM.png', title: 'Process Innovation', description: 'Continuous improvement in manufacturing processes ensures superior quality.' },
+    { src: 'images/misc/Screenshot_2025-08-27_at_8_30_07_PM.png', title: 'Finishing Excellence', description: 'Precision finishing processes deliver the perfect surface quality.' },
+    { src: 'images/misc/Screenshot_2025-08-27_at_8_30_21_PM.png', title: 'Final Inspection', description: 'Every product undergoes final quality inspection before shipment.' }
+  ]
+};
+
+let craftsmanshipGalleries = {};
+let autoScrollTimers = {};
+
 function init() {
+  // Ensure page starts at the top
+  window.scrollTo(0, 0);
+  
   setupScene();
   setupLights();
   loadSketchfabGarageDoor();
+  initializeCraftsmanshipGalleries();
   setupScrollListener();
   animate();
 
-  // Hide loading screen after everything is loaded
   setTimeout(() => {
     document.getElementById("loading-screen").style.opacity = "0";
     setTimeout(() => {
@@ -22,15 +64,12 @@ function init() {
   }, 2000);
 }
 
-// Setup Three.js scene
 function setupScene() {
-  // Scene
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x0f172a);
+  scene.background = new THREE.Color(0x008080);
 
-  // Camera
   const isMobile = window.innerWidth <= 768;
-  const cameraDistance = isMobile ? 35 : 25; // Further back on mobile
+  const cameraDistance = isMobile ? 35 : 25;
   camera = new THREE.PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
@@ -39,36 +78,30 @@ function setupScene() {
   );
   camera.position.set(0, 0, cameraDistance);
 
-  // Renderer
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for mobile performance
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.outputEncoding = THREE.sRGBEncoding;
 
   document.getElementById("scene-container").appendChild(renderer.domElement);
 
-  // Controls
   controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
   controls.enableZoom = false;
   controls.enablePan = false;
-  controls.autoRotate = false; // Disable auto-rotation for static door
-  controls.enableRotate = false; // Disable manual rotation
+  controls.autoRotate = false;
+  controls.enableRotate = false;
 
-  // Handle window resize
   window.addEventListener("resize", onWindowResize);
 }
 
-// Setup lighting
 function setupLights() {
-  // Ambient light
   const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
   scene.add(ambientLight);
 
-  // Directional light (sun)
   const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
   directionalLight.position.set(5, 10, 5);
   directionalLight.castShadow = true;
@@ -82,47 +115,35 @@ function setupLights() {
   directionalLight.shadow.camera.bottom = -10;
   scene.add(directionalLight);
 
-  // Point light for dramatic effect
   const pointLight = new THREE.PointLight(0x6366f1, 0.4, 12);
   pointLight.position.set(0, 3, 2);
   scene.add(pointLight);
 }
 
-// Load the garage door model from garage_door_01 folder
 function loadSketchfabGarageDoor() {
   const loader = new THREE.GLTFLoader();
-
-  // Load the existing garage door model from garage_door_01 folder
   const modelPath = "garage_door_01/scene.gltf";
 
   loader.load(
     modelPath,
     (gltf) => {
-      console.log("Garage door model loaded successfully:", gltf);
-
       garageDoor = gltf.scene;
 
-      // Scale and position the model appropriately - closer to camera
       const isMobile = window.innerWidth <= 768;
-      const scale = isMobile ? 15 : 25; // Much smaller scale on mobile to zoom out
+      const scale = isMobile ? 15 : 25;
       garageDoor.scale.set(scale, scale, scale);
 
-      // Position model differently for mobile vs desktop
       if (isMobile) {
-        garageDoor.position.set(0, -5, 10); // Further back and higher for mobile
+        garageDoor.position.set(0, -15, 10);
       } else {
-        garageDoor.position.set(0, -10, 5); // Original position for desktop
+        garageDoor.position.set(0, -20, 5);
       }
 
-      // Enable shadows for all meshes
       garageDoor.traverse((child) => {
         if (child.isMesh) {
           child.castShadow = true;
           child.receiveShadow = true;
-          console.log("Found mesh:", child.name);
 
-          // Store references to door panels for animation
-          // Look for door-related meshes but exclude frame
           if (
             (child.name.includes("Door") ||
               child.name.includes("door") ||
@@ -136,84 +157,54 @@ function loadSketchfabGarageDoor() {
             child.userData.originalZ = child.position.z;
             child.userData.originalRotation = child.rotation.z;
             doorPanels.push(child);
-            console.log("Added door panel for animation:", child.name);
           }
         }
       });
 
-      // Add GALVANIX text to the garage door
       addGalvanixTextToDoor();
-
       scene.add(garageDoor);
       isLoaded = true;
 
-      console.log(
-        "Garage door model loaded with",
-        doorPanels.length,
-        "door panels"
-      );
-
-      // If no panels found, create fallback animation with all meshes
       if (doorPanels.length === 0) {
-        console.log(
-          "No door panels found, creating fallback animation with all meshes..."
-        );
         createFallbackAnimation();
       }
     },
-    (progress) => {
-      console.log(
-        "Loading progress:",
-        (progress.loaded / progress.total) * 100 + "%"
-      );
-    },
+    (progress) => {},
     (error) => {
       console.error("Error loading garage door model:", error);
-      console.log("Creating fallback garage door...");
-      createFallbackGarageDoor();
     }
   );
 }
 
-// Create fallback animation if no panels are found
+
+
 function createFallbackAnimation() {
-  // Try to find any meshes that could be animated
   garageDoor.traverse((child) => {
     if (child.isMesh) {
       child.userData.originalY = child.position.y;
       child.userData.originalZ = child.position.z;
       child.userData.originalRotation = child.rotation.z;
       doorPanels.push(child);
-      console.log("Added mesh for fallback animation:", child.name);
     }
   });
 
-  console.log("Fallback animation created with", doorPanels.length, "meshes");
-
-  // If still no meshes found, create a simple garage door
   if (doorPanels.length === 0) {
-    console.log("No meshes found in model, creating simple garage door...");
     createFallbackGarageDoor();
   }
 }
 
-// Add GALVANIX text to the garage door
 function addGalvanixTextToDoor() {
-  // Create a canvas for the text texture
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
   canvas.width = 512;
   canvas.height = 128;
 
-  // Set background to transparent
   context.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Create gradient for text
   const gradient = context.createLinearGradient(0, 0, canvas.width, 0);
   gradient.addColorStop(0, "#6366f1");
   gradient.addColorStop(1, "#8b5cf6");
 
-  // Set text properties
   context.font = "bold 48px Inter, sans-serif";
   context.textAlign = "center";
   context.textBaseline = "middle";
@@ -221,15 +212,12 @@ function addGalvanixTextToDoor() {
   context.strokeStyle = "#ffffff";
   context.lineWidth = 2;
 
-  // Add text with stroke for better visibility
   context.strokeText("GALVANIX", canvas.width / 2, canvas.height / 2);
   context.fillText("GALVANIX", canvas.width / 2, canvas.height / 2);
 
-  // Create texture from canvas
   const texture = new THREE.CanvasTexture(canvas);
   texture.needsUpdate = true;
 
-  // Create plane geometry for the text
   const textGeometry = new THREE.PlaneGeometry(8, 2);
   const textMaterial = new THREE.MeshBasicMaterial({
     map: texture,
@@ -238,135 +226,21 @@ function addGalvanixTextToDoor() {
   });
 
   const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+  textMesh.position.set(0, 2, 0.1);
+  textMesh.rotation.x = -Math.PI / 2;
 
-  // Position the text on the garage door (adjust these values as needed)
-  textMesh.position.set(0, 2, 0.1); // Slightly in front of the door
-  textMesh.rotation.x = -Math.PI / 2; // Rotate to face forward
-
-  // Add the text to the garage door so it moves with it
   garageDoor.add(textMesh);
-
-  // Store reference to text for potential animation
   garageDoor.userData.galvanixText = textMesh;
-
-  console.log("GALVANIX text added to garage door");
 }
 
-// Create a fallback garage door if the model fails to load
-function createFallbackGarageDoor() {
-  console.log("Creating fallback garage door...");
-
-  // Create individual door panels that retract
-  const panelCount = 8;
-  const panelHeight = 3;
-  const panelWidth = 20;
-  const panelDepth = 0.1;
-
-  for (let i = 0; i < panelCount; i++) {
-    const panelGeometry = new THREE.BoxGeometry(
-      panelWidth,
-      panelHeight - 0.05,
-      panelDepth
-    );
-    const panelMaterial = new THREE.MeshPhongMaterial({
-      color: 0x1e293b,
-      shininess: 90,
-      specular: 0x475569,
-    });
-
-    const panel = new THREE.Mesh(panelGeometry, panelMaterial);
-
-    // Position panels from bottom to top
-    const panelY =
-      (panelCount * panelHeight) / 2 - i * panelHeight + panelHeight / 2;
-    panel.position.set(0, panelY, 0);
-
-    panel.userData = {
-      originalY: panelY,
-      originalZ: 0,
-      originalRotation: 0,
-      index: i,
-    };
-
-    panel.castShadow = true;
-    panel.receiveShadow = true;
-
-    doorPanels.push(panel);
-    scene.add(panel);
-  }
-
-  // Add GALVANIX text to the fallback garage door
-  addGalvanixTextToFallbackDoor();
-
-  isLoaded = true;
-  console.log("Fallback garage door created with", panelCount, "panels");
-}
-
-// Add GALVANIX text to the fallback garage door
-function addGalvanixTextToFallbackDoor() {
-  // Create a canvas for the text texture
-  const canvas = document.createElement("canvas");
-  const context = canvas.getContext("2d");
-  canvas.width = 512;
-  canvas.height = 128;
-
-  // Set background to transparent
-  context.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Create gradient for text
-  const gradient = context.createLinearGradient(0, 0, canvas.width, 0);
-  gradient.addColorStop(0, "#6366f1");
-  gradient.addColorStop(1, "#8b5cf6");
-
-  // Set text properties
-  context.font = "bold 48px Inter, sans-serif";
-  context.textAlign = "center";
-  context.textBaseline = "middle";
-  context.fillStyle = gradient;
-  context.strokeStyle = "#ffffff";
-  context.lineWidth = 2;
-
-  // Add text with stroke for better visibility
-  context.strokeText("GALVANIX", canvas.width / 2, canvas.height / 2);
-  context.fillText("GALVANIX", canvas.width / 2, canvas.height / 2);
-
-  // Create texture from canvas
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.needsUpdate = true;
-
-  // Create plane geometry for the text
-  const textGeometry = new THREE.PlaneGeometry(16, 4);
-  const textMaterial = new THREE.MeshBasicMaterial({
-    map: texture,
-    transparent: true,
-    alphaTest: 0.1,
-  });
-
-  const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-
-  // Position the text on the fallback garage door
-  textMesh.position.set(0, 8, 0.1); // Position above the panels
-  textMesh.rotation.x = -Math.PI / 2; // Rotate to face forward
-
-  // Add the text to the scene
-  scene.add(textMesh);
-
-  console.log("GALVANIX text added to fallback garage door");
-}
-
-// Setup scroll listener for animations
 function setupScrollListener() {
   window.addEventListener("scroll", () => {
     scrollPercent =
       window.scrollY / (document.body.scrollHeight - window.innerHeight);
 
-    // Animate garage door opening based on scroll
     animateGarageDoor();
-
-    // Animate camera position
     animateCamera();
 
-    // Show/hide scroll indicator
     const scrollIndicator = document.querySelector(".scroll-indicator");
     if (scrollPercent > 0.1) {
       scrollIndicator.style.opacity = "0";
@@ -376,104 +250,274 @@ function setupScrollListener() {
   });
 }
 
-// Animate garage door opening with proper retraction (matching Sketchfab model)
 function animateGarageDoor() {
   if (!isLoaded || doorPanels.length === 0) return;
+
+  let totalDoorProgress = 0;
 
   doorPanels.forEach((panel, index) => {
     const originalY = panel.userData.originalY;
     const originalZ = panel.userData.originalZ;
     const originalRotation = panel.userData.originalRotation;
 
-    // Calculate retraction based on scroll
-    // Each panel starts retracting when the previous one is mostly retracted
-    const panelStartThreshold = index * 0.12; // Each panel starts 12% later (slower)
+    const panelStartThreshold = index * 0.02;
     const panelProgress = Math.max(
       0,
-      Math.min(1, (scrollPercent - panelStartThreshold) * 1.5)
-    ); // Slower animation
+      Math.min(1, (scrollPercent - panelStartThreshold) * 3)
+    );
 
     if (panelProgress > 0) {
-      // Move panel in Z direction only (toward/away from camera)
-      const retractionDistance = 8; // Distance to move in Z direction
-      const retractionProgress = Math.min(1, panelProgress * 1.2); // Slower retraction
+      const retractionDistance = 8;
+      const retractionProgress = Math.min(1, panelProgress * 2.4);
 
-      // Keep Y position exactly the same (no up/down movement)
       panel.position.y = originalY;
-
-      // Move panel in Z direction (away from camera when opening - inverted)
       panel.position.z = originalZ + retractionProgress * retractionDistance;
-
-      // Keep rotation the same (no rotation)
       panel.rotation.z = originalRotation;
+
+      totalDoorProgress += retractionProgress;
     } else {
-      // Reset panel to original position
       panel.position.y = originalY;
       panel.position.z = originalZ;
       panel.rotation.z = originalRotation;
     }
   });
+
+
 }
 
-// Animate camera position
 function animateCamera() {
   const isMobile = window.innerWidth <= 768;
   const baseDistance = isMobile ? 35 : 25;
 
-  // Camera moves back and slightly up as user scrolls
   const targetY = 0 + scrollPercent * 3;
   const targetZ = baseDistance + scrollPercent * 8;
 
   camera.position.y += (targetY - camera.position.y) * 0.05;
   camera.position.z += (targetZ - camera.position.z) * 0.05;
 
-  // Look at the center of the garage door
   const lookAtY = isMobile ? -5 : 0;
   camera.lookAt(0, lookAtY, 5);
 }
 
-// Handle window resize
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 
-  // Adjust pixel ratio for mobile performance
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-  // Adjust camera distance based on screen size
   const isMobile = window.innerWidth <= 768;
   const cameraDistance = isMobile ? 35 : 25;
   camera.position.z = cameraDistance;
 
-  // Update model scale and position if it's loaded
   if (garageDoor && isLoaded) {
     const scale = isMobile ? 15 : 25;
     garageDoor.scale.set(scale, scale, scale);
 
     if (isMobile) {
-      garageDoor.position.set(0, -5, 10);
+      garageDoor.position.set(0, -15, 10);
     } else {
-      garageDoor.position.set(0, -10, 5);
+      garageDoor.position.set(0, -20, 5);
     }
+  }
+
+  // Update gallery sizes for mobile
+  const galleries = document.querySelectorAll('.product-gallery');
+  galleries.forEach(gallery => {
+    if (isMobile) {
+      gallery.style.width = '280px';
+    } else {
+      gallery.style.width = '300px';
+    }
+  });
+}
+
+// Old gallery functions removed since product specs section was removed
+
+// Craftsmanship Gallery Functions
+function initializeCraftsmanshipGalleries() {
+  Object.keys(craftsmanshipData).forEach(category => {
+    createCraftsmanshipGallery(category);
+  });
+}
+
+function createCraftsmanshipGallery(category) {
+  const data = craftsmanshipData[category];
+  if (!data || data.length === 0) return;
+
+  const track = document.getElementById(`track-${category}`);
+  const dotsContainer = document.getElementById(`dots-${category}`);
+  
+  if (!track || !dotsContainer) return;
+
+  // Create slides
+  track.innerHTML = '';
+  dotsContainer.innerHTML = '';
+  
+  data.forEach((item, index) => {
+    // Create slide
+    const slide = document.createElement('div');
+    slide.className = 'gallery-slide';
+    if (index === 0) slide.classList.add('active');
+    
+    const img = document.createElement('img');
+    img.src = item.src;
+    img.alt = item.title;
+    img.loading = 'lazy';
+    
+    // Add error handling with fallback
+    img.onerror = function() {
+      console.warn('Failed to load image:', this.src);
+      // Create a placeholder div instead
+      const placeholder = document.createElement('div');
+      placeholder.className = 'image-placeholder';
+      placeholder.innerHTML = `
+        <div class="placeholder-content">
+          <div class="placeholder-icon">📷</div>
+          <div class="placeholder-text">${item.title}</div>
+        </div>
+      `;
+      this.parentNode.replaceChild(placeholder, this);
+    };
+    
+    const overlay = document.createElement('div');
+    overlay.className = 'slide-overlay';
+    overlay.innerHTML = `
+      <h4>${item.title}</h4>
+      <p>${item.description}</p>
+    `;
+    
+    slide.appendChild(img);
+    slide.appendChild(overlay);
+    
+    track.appendChild(slide);
+    
+    // Create dot
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot';
+    if (index === 0) dot.classList.add('active');
+    dot.addEventListener('click', () => goToCraftsmanshipSlide(category, index));
+    dotsContainer.appendChild(dot);
+  });
+
+  // Initialize gallery state
+  craftsmanshipGalleries[category] = {
+    currentIndex: 0,
+    totalSlides: data.length,
+    track: track,
+    dots: dotsContainer.querySelectorAll('.nav-dot'),
+    progressBar: document.getElementById(`progress-${category}`)
+  };
+
+  // Start auto-scroll when gallery comes into view
+  startAutoScroll(category);
+}
+
+function goToCraftsmanshipSlide(category, index) {
+  const gallery = craftsmanshipGalleries[category];
+  if (!gallery) return;
+
+  gallery.currentIndex = index;
+  updateCraftsmanshipGallery(category);
+  
+  // Reset auto-scroll timer
+  clearTimeout(autoScrollTimers[category]);
+  startAutoScroll(category);
+}
+
+function updateCraftsmanshipGallery(category) {
+  const gallery = craftsmanshipGalleries[category];
+  if (!gallery) return;
+
+  const { currentIndex, totalSlides, track, dots, progressBar } = gallery;
+  
+  // Update track position
+  track.style.transform = `translateX(-${currentIndex * 100}%)`;
+  
+  // Update dots
+  dots.forEach((dot, index) => {
+    dot.classList.toggle('active', index === currentIndex);
+  });
+  
+  // Update progress bar
+  if (progressBar) {
+    const progress = ((currentIndex + 1) / totalSlides) * 100;
+    progressBar.style.width = `${progress}%`;
   }
 }
 
-// Animation loop
+function startAutoScroll(category) {
+  const gallery = craftsmanshipGalleries[category];
+  if (!gallery) return;
+
+  autoScrollTimers[category] = setTimeout(() => {
+    const nextIndex = (gallery.currentIndex + 1) % gallery.totalSlides;
+    goToCraftsmanshipSlide(category, nextIndex);
+  }, 4000); // 4 seconds per slide
+}
+
+function stopAutoScroll(category) {
+  if (autoScrollTimers[category]) {
+    clearTimeout(autoScrollTimers[category]);
+  }
+}
+
+// Intersection Observer for auto-scroll management
+const craftsmanshipObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    const category = entry.target.querySelector('.immersive-gallery')?.getAttribute('data-category');
+    if (category) {
+      if (entry.isIntersecting) {
+        startAutoScroll(category);
+      } else {
+        stopAutoScroll(category);
+      }
+    }
+  });
+}, { threshold: 0.3 });
+
+// Observe all craft categories when DOM is ready
+setTimeout(() => {
+  document.querySelectorAll('.craft-category').forEach(category => {
+    craftsmanshipObserver.observe(category);
+  });
+}, 1000);
+
+// Remove old product specs keyboard navigation since section was removed
+
 function animate() {
   requestAnimationFrame(animate);
-
-  // Update controls
   controls.update();
-
-  // Render scene
   renderer.render(scene, camera);
 }
 
-// Initialize when DOM is loaded
-document.addEventListener("DOMContentLoaded", init);
 
-// Add smooth scrolling for navigation
+
+// Disable automatic scroll restoration
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+
+// Ensure page starts at top immediately when DOM is ready
+document.addEventListener("DOMContentLoaded", () => {
+  // Force scroll to top before initialization
+  window.scrollTo(0, 0);
+  init();
+});
+
+// Also handle page refresh/reload cases
+window.addEventListener("beforeunload", () => {
+  window.scrollTo(0, 0);
+});
+
+// Handle browser back/forward navigation
+window.addEventListener("pageshow", (event) => {
+  if (event.persisted) {
+    // Page was loaded from cache, ensure we start at top
+    window.scrollTo(0, 0);
+  }
+});
+
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", function (e) {
     e.preventDefault();
@@ -487,7 +531,6 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   });
 });
 
-// Add intersection observer for section animations
 const observerOptions = {
   threshold: 0.1,
   rootMargin: "0px 0px -50px 0px",
@@ -502,7 +545,6 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, observerOptions);
 
-// Observe all sections
 document.querySelectorAll(".section").forEach((section) => {
   observer.observe(section);
 });
