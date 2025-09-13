@@ -8,38 +8,138 @@ let isLoaded = false;
 
 // Craftsmanship gallery data
 const craftsmanshipData = {
-  '100mm': [
-    { src: 'images/100mm/Screenshot_2025-08-27_at_8_18_46_PM.png', title: 'Precision Manufacturing', description: 'Each 100mm slat is precision-engineered with foam-filled cores for maximum insulation.' },
-    { src: 'images/100mm/Screenshot_2025-08-27_at_8_19_39_PM.png', title: 'Interlocking Design', description: 'Our patented zigzag interlock system ensures superior security and weather sealing.' },
-    { src: 'images/100mm/Screenshot_2025-08-27_at_8_20_12_PM.png', title: 'Quality Assurance', description: 'Every component undergoes rigorous quality control to meet our exacting standards.' }
+  "100mm": [
+    {
+      src: "images/100mm/Screenshot_2025-08-27_at_8_18_46_PM.png",
+      title: "Precision Manufacturing",
+      description:
+        "Each 100mm slat is precision-engineered with foam-filled cores for maximum insulation.",
+    },
+    {
+      src: "images/100mm/Screenshot_2025-08-27_at_8_19_39_PM.png",
+      title: "Interlocking Design",
+      description:
+        "Our patented zigzag interlock system ensures superior security and weather sealing.",
+    },
+    {
+      src: "images/100mm/Screenshot_2025-08-27_at_8_20_12_PM.png",
+      title: "Quality Assurance",
+      description:
+        "Every component undergoes rigorous quality control to meet our exacting standards.",
+    },
   ],
-  '80mm': [
-    { src: 'images/80mm/Screenshot_2025-08-27_at_8_28_34_PM.png', title: 'Contoured Excellence', description: 'Our 80mm slats feature advanced contoured design for strength and aesthetic appeal.' },
-    { src: 'images/80mm/Screenshot_2025-08-27_at_8_28_52_PM.png', title: 'Galvanized Protection', description: 'Premium galvanized steel construction with 120 zinc coating for ultimate durability.' }
+  "80mm": [
+    {
+      src: "images/80mm/Screenshot_2025-08-27_at_8_28_34_PM.png",
+      title: "Contoured Excellence",
+      description:
+        "Our 80mm slats feature advanced contoured design for strength and aesthetic appeal.",
+    },
+    {
+      src: "images/80mm/Screenshot_2025-08-27_at_8_28_52_PM.png",
+      title: "Galvanized Protection",
+      description:
+        "Premium galvanized steel construction with 120 zinc coating for ultimate durability.",
+    },
   ],
-  'guide-rails': [
-    { src: 'images/guide-rails/Screenshot_2025-08-27_at_8_26_53_PM.png', title: 'Precision Engineering', description: 'Custom-engineered guide rails ensure smooth operation and perfect alignment.' },
-    { src: 'images/guide-rails/Screenshot_2025-08-27_at_8_27_56_PM.png', title: 'Structural Integrity', description: 'Heavy-duty construction designed to withstand years of reliable operation.' },
-    { src: 'images/guide-rails/Screenshot_2025-08-27_at_8_28_04_PM.png', title: 'Installation Excellence', description: 'Precision-fitted components for seamless installation and optimal performance.' }
+  "guide-rails": [
+    {
+      src: "images/guide-rails/Screenshot_2025-08-27_at_8_26_53_PM.png",
+      title: "Precision Engineering",
+      description:
+        "Custom-engineered guide rails ensure smooth operation and perfect alignment.",
+    },
+    {
+      src: "images/guide-rails/Screenshot_2025-08-27_at_8_27_56_PM.png",
+      title: "Structural Integrity",
+      description:
+        "Heavy-duty construction designed to withstand years of reliable operation.",
+    },
+    {
+      src: "images/guide-rails/Screenshot_2025-08-27_at_8_28_04_PM.png",
+      title: "Installation Excellence",
+      description:
+        "Precision-fitted components for seamless installation and optimal performance.",
+    },
   ],
-  'end-caps': [
-    { src: 'images/end-caps/Screenshot_2025-08-27_at_8_24_58_PM.png', title: 'Precision Molding', description: 'Engineered end caps provide structural integrity and complete weather sealing.' },
-    { src: 'images/end-caps/Screenshot_2025-08-27_at_8_25_25_PM.png', title: 'Quality Materials', description: 'Premium materials ensure long-lasting performance in all weather conditions.' },
-    { src: 'images/end-caps/Screenshot_2025-08-27_at_8_25_39_PM.png', title: 'Perfect Fit', description: 'Precision-engineered for exact fit and optimal sealing performance.' }
+  "end-caps": [
+    {
+      src: "images/end-caps/Screenshot_2025-08-27_at_8_24_58_PM.png",
+      title: "Precision Molding",
+      description:
+        "Engineered end caps provide structural integrity and complete weather sealing.",
+    },
+    {
+      src: "images/end-caps/Screenshot_2025-08-27_at_8_25_25_PM.png",
+      title: "Quality Materials",
+      description:
+        "Premium materials ensure long-lasting performance in all weather conditions.",
+    },
+    {
+      src: "images/end-caps/Screenshot_2025-08-27_at_8_25_39_PM.png",
+      title: "Perfect Fit",
+      description:
+        "Precision-engineered for exact fit and optimal sealing performance.",
+    },
   ],
-  'bottom-seal': [
-    { src: 'images/bottom-seal/Screenshot_2025-08-27_at_8_25_52_PM.png', title: 'Weather Protection', description: 'Advanced sealing technology ensures complete protection from the elements.' },
-    { src: 'images/bottom-seal/Screenshot_2025-08-27_at_8_26_11_PM.png', title: 'Energy Efficiency', description: 'Superior sealing reduces energy loss and maintains optimal indoor climate.' }
+  "bottom-seal": [
+    {
+      src: "images/bottom-seal/Screenshot_2025-08-27_at_8_25_52_PM.png",
+      title: "Weather Protection",
+      description:
+        "Advanced sealing technology ensures complete protection from the elements.",
+    },
+    {
+      src: "images/bottom-seal/Screenshot_2025-08-27_at_8_26_11_PM.png",
+      title: "Energy Efficiency",
+      description:
+        "Superior sealing reduces energy loss and maintains optimal indoor climate.",
+    },
   ],
-  'misc': [
-    { src: 'images/misc/Screenshot_2025-08-27_at_8_24_05_PM.png', title: 'State-of-the-Art Facility', description: 'Our modern manufacturing facilities utilize cutting-edge technology and processes.' },
-    { src: 'images/misc/Screenshot_2025-08-27_at_8_24_38_PM.png', title: 'Quality Control', description: 'Rigorous testing and inspection ensures every component meets our standards.' },
-    { src: 'images/misc/Screenshot_2025-08-27_at_8_29_09_PM.png', title: 'Advanced Machinery', description: 'Precision manufacturing equipment delivers consistent, high-quality results.' },
-    { src: 'images/misc/Screenshot_2025-08-27_at_8_29_35_PM.png', title: 'Material Excellence', description: 'Only the finest raw materials are selected for Galvanix products.' },
-    { src: 'images/misc/Screenshot_2025-08-27_at_8_29_45_PM.png', title: 'Process Innovation', description: 'Continuous improvement in manufacturing processes ensures superior quality.' },
-    { src: 'images/misc/Screenshot_2025-08-27_at_8_30_07_PM.png', title: 'Finishing Excellence', description: 'Precision finishing processes deliver the perfect surface quality.' },
-    { src: 'images/misc/Screenshot_2025-08-27_at_8_30_21_PM.png', title: 'Final Inspection', description: 'Every product undergoes final quality inspection before shipment.' }
-  ]
+  misc: [
+    {
+      src: "images/misc/Screenshot_2025-08-27_at_8_24_05_PM.png",
+      title: "State-of-the-Art Facility",
+      description:
+        "Our modern manufacturing facilities utilize cutting-edge technology and processes.",
+    },
+    {
+      src: "images/misc/Screenshot_2025-08-27_at_8_24_38_PM.png",
+      title: "Quality Control",
+      description:
+        "Rigorous testing and inspection ensures every component meets our standards.",
+    },
+    {
+      src: "images/misc/Screenshot_2025-08-27_at_8_29_09_PM.png",
+      title: "Advanced Machinery",
+      description:
+        "Precision manufacturing equipment delivers consistent, high-quality results.",
+    },
+    {
+      src: "images/misc/Screenshot_2025-08-27_at_8_29_35_PM.png",
+      title: "Material Excellence",
+      description:
+        "Only the finest raw materials are selected for Galvanix products.",
+    },
+    {
+      src: "images/misc/Screenshot_2025-08-27_at_8_29_45_PM.png",
+      title: "Process Innovation",
+      description:
+        "Continuous improvement in manufacturing processes ensures superior quality.",
+    },
+    {
+      src: "images/misc/Screenshot_2025-08-27_at_8_30_07_PM.png",
+      title: "Finishing Excellence",
+      description:
+        "Precision finishing processes deliver the perfect surface quality.",
+    },
+    {
+      src: "images/misc/Screenshot_2025-08-27_at_8_30_21_PM.png",
+      title: "Final Inspection",
+      description:
+        "Every product undergoes final quality inspection before shipment.",
+    },
+  ],
 };
 
 let craftsmanshipGalleries = {};
@@ -48,13 +148,16 @@ let autoScrollTimers = {};
 function init() {
   // Ensure page starts at the top
   window.scrollTo(0, 0);
-  
+
+  // Initialize 3D scene for both desktop and mobile
   setupScene();
   setupLights();
   loadSketchfabGarageDoor();
+  animate();
+
   initializeCraftsmanshipGalleries();
   setupScrollListener();
-  animate();
+  setupMobileMenu();
 
   setTimeout(() => {
     document.getElementById("loading-screen").style.opacity = "0";
@@ -69,9 +172,10 @@ function setupScene() {
   scene.background = new THREE.Color(0x008080);
 
   const isMobile = window.innerWidth <= 768;
-  const cameraDistance = isMobile ? 35 : 25;
+  const cameraDistance = isMobile ? 40 : 25;
+  const fov = isMobile ? 60 : 75; // Reduce FOV on mobile for better performance
   camera = new THREE.PerspectiveCamera(
-    75,
+    fov,
     window.innerWidth / window.innerHeight,
     0.1,
     1000
@@ -80,8 +184,12 @@ function setupScene() {
 
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.shadowMap.enabled = true;
+  // Optimize pixel ratio for mobile
+  const pixelRatio = isMobile
+    ? Math.min(window.devicePixelRatio, 1.5)
+    : Math.min(window.devicePixelRatio, 2);
+  renderer.setPixelRatio(pixelRatio);
+  renderer.shadowMap.enabled = !isMobile; // Disable shadows on mobile for performance
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.outputEncoding = THREE.sRGBEncoding;
 
@@ -130,11 +238,11 @@ function loadSketchfabGarageDoor() {
       garageDoor = gltf.scene;
 
       const isMobile = window.innerWidth <= 768;
-      const scale = isMobile ? 15 : 25;
+      const scale = isMobile ? 15 : 25; // Slightly larger scale for mobile
       garageDoor.scale.set(scale, scale, scale);
 
       if (isMobile) {
-        garageDoor.position.set(0, -15, 10);
+        garageDoor.position.set(0, -8, 6); // Better positioning for smaller hero section
       } else {
         garageDoor.position.set(0, -20, 5);
       }
@@ -175,8 +283,6 @@ function loadSketchfabGarageDoor() {
     }
   );
 }
-
-
 
 function createFallbackAnimation() {
   garageDoor.traverse((child) => {
@@ -238,16 +344,72 @@ function setupScrollListener() {
     scrollPercent =
       window.scrollY / (document.body.scrollHeight - window.innerHeight);
 
-    animateGarageDoor();
-    animateCamera();
+    // Only animate 3D elements if they exist
+    if (isLoaded && doorPanels.length > 0) {
+      animateGarageDoor();
+    }
+    if (camera) {
+      animateCamera();
+    }
 
     const scrollIndicator = document.querySelector(".scroll-indicator");
-    if (scrollPercent > 0.1) {
-      scrollIndicator.style.opacity = "0";
-    } else {
-      scrollIndicator.style.opacity = "0.7";
+    if (scrollIndicator) {
+      if (scrollPercent > 0.1) {
+        scrollIndicator.style.opacity = "0";
+      } else {
+        scrollIndicator.style.opacity = "0.7";
+      }
     }
   });
+}
+
+function setupMobileMenu() {
+  const mobileMenuToggle = document.getElementById("mobile-menu-toggle");
+  const headerNav = document.getElementById("header-nav");
+
+  if (mobileMenuToggle && headerNav) {
+    mobileMenuToggle.addEventListener("click", () => {
+      mobileMenuToggle.classList.toggle("active");
+      headerNav.classList.toggle("active");
+
+      // Prevent body scroll when menu is open
+      if (headerNav.classList.contains("active")) {
+        document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "";
+      }
+    });
+
+    // Close menu when clicking on nav links
+    headerNav.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        mobileMenuToggle.classList.remove("active");
+        headerNav.classList.remove("active");
+        document.body.style.overflow = "";
+      });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener("click", (e) => {
+      if (
+        !mobileMenuToggle.contains(e.target) &&
+        !headerNav.contains(e.target)
+      ) {
+        mobileMenuToggle.classList.remove("active");
+        headerNav.classList.remove("active");
+        document.body.style.overflow = "";
+      }
+    });
+
+    // Close menu on window resize to desktop
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 768) {
+        mobileMenuToggle.classList.remove("active");
+        headerNav.classList.remove("active");
+        document.body.style.overflow = "";
+      }
+    });
+  }
 }
 
 function animateGarageDoor() {
@@ -281,8 +443,6 @@ function animateGarageDoor() {
       panel.rotation.z = originalRotation;
     }
   });
-
-
 }
 
 function animateCamera() {
@@ -295,39 +455,46 @@ function animateCamera() {
   camera.position.y += (targetY - camera.position.y) * 0.05;
   camera.position.z += (targetZ - camera.position.z) * 0.05;
 
-  const lookAtY = isMobile ? -5 : 0;
+  const lookAtY = isMobile ? -5 : 0; // Better look-at point for smaller mobile hero
   camera.lookAt(0, lookAtY, 5);
 }
 
 function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
   const isMobile = window.innerWidth <= 768;
-  const cameraDistance = isMobile ? 35 : 25;
-  camera.position.z = cameraDistance;
 
-  if (garageDoor && isLoaded) {
-    const scale = isMobile ? 15 : 25;
-    garageDoor.scale.set(scale, scale, scale);
+  // Update 3D elements if they exist
+  if (camera && renderer) {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
-    if (isMobile) {
-      garageDoor.position.set(0, -15, 10);
-    } else {
-      garageDoor.position.set(0, -20, 5);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    const cameraDistance = isMobile ? 35 : 25;
+    const fov = isMobile ? 60 : 75;
+    camera.fov = fov;
+    camera.updateProjectionMatrix();
+    camera.position.z = cameraDistance;
+
+    if (garageDoor && isLoaded) {
+      const scale = isMobile ? 15 : 25;
+      garageDoor.scale.set(scale, scale, scale);
+
+      if (isMobile) {
+        garageDoor.position.set(0, -8, 6);
+      } else {
+        garageDoor.position.set(0, -20, 5);
+      }
     }
   }
 
   // Update gallery sizes for mobile
-  const galleries = document.querySelectorAll('.product-gallery');
-  galleries.forEach(gallery => {
+  const galleries = document.querySelectorAll(".product-gallery");
+  galleries.forEach((gallery) => {
     if (isMobile) {
-      gallery.style.width = '280px';
+      gallery.style.width = "280px";
     } else {
-      gallery.style.width = '300px';
+      gallery.style.width = "300px";
     }
   });
 }
@@ -336,7 +503,7 @@ function onWindowResize() {
 
 // Craftsmanship Gallery Functions
 function initializeCraftsmanshipGalleries() {
-  Object.keys(craftsmanshipData).forEach(category => {
+  Object.keys(craftsmanshipData).forEach((category) => {
     createCraftsmanshipGallery(category);
   });
 }
@@ -347,30 +514,32 @@ function createCraftsmanshipGallery(category) {
 
   const track = document.getElementById(`track-${category}`);
   const dotsContainer = document.getElementById(`dots-${category}`);
-  
+  const gallery = document.querySelector(`[data-category="${category}"]`);
+
   if (!track || !dotsContainer) return;
 
   // Create slides
-  track.innerHTML = '';
-  dotsContainer.innerHTML = '';
-  
+  track.innerHTML = "";
+  dotsContainer.innerHTML = "";
+
   data.forEach((item, index) => {
     // Create slide
-    const slide = document.createElement('div');
-    slide.className = 'gallery-slide';
-    if (index === 0) slide.classList.add('active');
-    
-    const img = document.createElement('img');
+    const slide = document.createElement("div");
+    slide.className = "gallery-slide";
+    if (index === 0) slide.classList.add("active");
+
+    const img = document.createElement("img");
     img.src = item.src;
     img.alt = item.title;
-    img.loading = 'lazy';
-    
+    img.loading = "lazy";
+    img.decoding = "async"; // Improve image loading performance
+
     // Add error handling with fallback
-    img.onerror = function() {
-      console.warn('Failed to load image:', this.src);
+    img.onerror = function () {
+      console.warn("Failed to load image:", this.src);
       // Create a placeholder div instead
-      const placeholder = document.createElement('div');
-      placeholder.className = 'image-placeholder';
+      const placeholder = document.createElement("div");
+      placeholder.className = "image-placeholder";
       placeholder.innerHTML = `
         <div class="placeholder-content">
           <div class="placeholder-icon">📷</div>
@@ -379,24 +548,26 @@ function createCraftsmanshipGallery(category) {
       `;
       this.parentNode.replaceChild(placeholder, this);
     };
-    
-    const overlay = document.createElement('div');
-    overlay.className = 'slide-overlay';
+
+    const overlay = document.createElement("div");
+    overlay.className = "slide-overlay";
     overlay.innerHTML = `
       <h4>${item.title}</h4>
       <p>${item.description}</p>
     `;
-    
+
     slide.appendChild(img);
     slide.appendChild(overlay);
-    
+
     track.appendChild(slide);
-    
+
     // Create dot
-    const dot = document.createElement('div');
-    dot.className = 'nav-dot';
-    if (index === 0) dot.classList.add('active');
-    dot.addEventListener('click', () => goToCraftsmanshipSlide(category, index));
+    const dot = document.createElement("div");
+    dot.className = "nav-dot";
+    if (index === 0) dot.classList.add("active");
+    dot.addEventListener("click", () =>
+      goToCraftsmanshipSlide(category, index)
+    );
     dotsContainer.appendChild(dot);
   });
 
@@ -405,9 +576,14 @@ function createCraftsmanshipGallery(category) {
     currentIndex: 0,
     totalSlides: data.length,
     track: track,
-    dots: dotsContainer.querySelectorAll('.nav-dot'),
-    progressBar: document.getElementById(`progress-${category}`)
+    dots: dotsContainer.querySelectorAll(".nav-dot"),
+    progressBar: document.getElementById(`progress-${category}`),
   };
+
+  // Add touch gesture support
+  if (gallery) {
+    addTouchGestures(gallery, category);
+  }
 
   // Start auto-scroll when gallery comes into view
   startAutoScroll(category);
@@ -419,7 +595,7 @@ function goToCraftsmanshipSlide(category, index) {
 
   gallery.currentIndex = index;
   updateCraftsmanshipGallery(category);
-  
+
   // Reset auto-scroll timer
   clearTimeout(autoScrollTimers[category]);
   startAutoScroll(category);
@@ -430,15 +606,15 @@ function updateCraftsmanshipGallery(category) {
   if (!gallery) return;
 
   const { currentIndex, totalSlides, track, dots, progressBar } = gallery;
-  
+
   // Update track position
   track.style.transform = `translateX(-${currentIndex * 100}%)`;
-  
+
   // Update dots
   dots.forEach((dot, index) => {
-    dot.classList.toggle('active', index === currentIndex);
+    dot.classList.toggle("active", index === currentIndex);
   });
-  
+
   // Update progress bar
   if (progressBar) {
     const progress = ((currentIndex + 1) / totalSlides) * 100;
@@ -450,10 +626,14 @@ function startAutoScroll(category) {
   const gallery = craftsmanshipGalleries[category];
   if (!gallery) return;
 
+  // Faster auto-scroll on mobile for better user experience
+  const isMobile = window.innerWidth <= 768;
+  const scrollInterval = isMobile ? 3000 : 4000; // 3 seconds on mobile, 4 on desktop
+
   autoScrollTimers[category] = setTimeout(() => {
     const nextIndex = (gallery.currentIndex + 1) % gallery.totalSlides;
     goToCraftsmanshipSlide(category, nextIndex);
-  }, 4000); // 4 seconds per slide
+  }, scrollInterval);
 }
 
 function stopAutoScroll(category) {
@@ -462,23 +642,126 @@ function stopAutoScroll(category) {
   }
 }
 
-// Intersection Observer for auto-scroll management
-const craftsmanshipObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    const category = entry.target.querySelector('.immersive-gallery')?.getAttribute('data-category');
-    if (category) {
-      if (entry.isIntersecting) {
-        startAutoScroll(category);
-      } else {
-        stopAutoScroll(category);
+function addTouchGestures(gallery, category) {
+  let startX = 0;
+  let startY = 0;
+  let isDragging = false;
+  let currentX = 0;
+  let initialTransform = 0;
+
+  gallery.addEventListener(
+    "touchstart",
+    (e) => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      isDragging = true;
+
+      const galleryData = craftsmanshipGalleries[category];
+      if (galleryData) {
+        initialTransform = -galleryData.currentIndex * 100;
       }
-    }
-  });
-}, { threshold: 0.3 });
+
+      // Stop auto-scroll when user interacts
+      stopAutoScroll(category);
+    },
+    { passive: true }
+  );
+
+  gallery.addEventListener(
+    "touchmove",
+    (e) => {
+      if (!isDragging) return;
+
+      currentX = e.touches[0].clientX;
+      const deltaX = currentX - startX;
+      const deltaY = Math.abs(e.touches[0].clientY - startY);
+
+      // Only handle horizontal swipes
+      if (Math.abs(deltaX) > deltaY && Math.abs(deltaX) > 10) {
+        e.preventDefault();
+
+        const galleryData = craftsmanshipGalleries[category];
+        if (galleryData) {
+          const track = galleryData.track;
+          const slideWidth = 100; // Percentage
+          const newTransform =
+            initialTransform + (deltaX / window.innerWidth) * 100;
+
+          // Constrain the transform
+          const maxTransform = -(galleryData.totalSlides - 1) * slideWidth;
+          const constrainedTransform = Math.max(
+            maxTransform,
+            Math.min(0, newTransform)
+          );
+
+          track.style.transition = "none";
+          track.style.transform = `translateX(${constrainedTransform}%)`;
+        }
+      }
+    },
+    { passive: false }
+  );
+
+  gallery.addEventListener(
+    "touchend",
+    (e) => {
+      if (!isDragging) return;
+
+      isDragging = false;
+      const deltaX = currentX - startX;
+      const threshold = 50; // Minimum swipe distance
+
+      const galleryData = craftsmanshipGalleries[category];
+      if (galleryData && Math.abs(deltaX) > threshold) {
+        if (deltaX > 0 && galleryData.currentIndex > 0) {
+          // Swipe right - go to previous slide
+          goToCraftsmanshipSlide(category, galleryData.currentIndex - 1);
+        } else if (
+          deltaX < 0 &&
+          galleryData.currentIndex < galleryData.totalSlides - 1
+        ) {
+          // Swipe left - go to next slide
+          goToCraftsmanshipSlide(category, galleryData.currentIndex + 1);
+        } else {
+          // Snap back to current slide
+          updateCraftsmanshipGallery(category);
+        }
+      } else {
+        // Snap back to current slide
+        updateCraftsmanshipGallery(category);
+      }
+
+      // Restart auto-scroll after a delay
+      setTimeout(() => {
+        startAutoScroll(category);
+      }, 2000);
+    },
+    { passive: true }
+  );
+}
+
+// Intersection Observer for auto-scroll management
+const craftsmanshipObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      const category = entry.target
+        .querySelector(".immersive-gallery")
+        ?.getAttribute("data-category");
+      if (category) {
+        if (entry.isIntersecting) {
+          startAutoScroll(category);
+        } else {
+          stopAutoScroll(category);
+        }
+      }
+    });
+  },
+  { threshold: 0.3 }
+);
 
 // Observe all craft categories when DOM is ready
 setTimeout(() => {
-  document.querySelectorAll('.craft-category').forEach(category => {
+  document.querySelectorAll(".craft-category").forEach((category) => {
     craftsmanshipObserver.observe(category);
   });
 }, 1000);
@@ -487,15 +770,15 @@ setTimeout(() => {
 
 function animate() {
   requestAnimationFrame(animate);
-  controls.update();
-  renderer.render(scene, camera);
+  if (controls && renderer && scene && camera) {
+    controls.update();
+    renderer.render(scene, camera);
+  }
 }
 
-
-
 // Disable automatic scroll restoration
-if ('scrollRestoration' in history) {
-  history.scrollRestoration = 'manual';
+if ("scrollRestoration" in history) {
+  history.scrollRestoration = "manual";
 }
 
 // Ensure page starts at top immediately when DOM is ready
