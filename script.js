@@ -158,6 +158,7 @@ function init() {
   initializeCraftsmanshipGalleries();
   setupScrollListener();
   setupMobileMenu();
+  setupLetterHoverEffects();
 
   setTimeout(() => {
     document.getElementById("loading-screen").style.opacity = "0";
@@ -410,6 +411,130 @@ function setupMobileMenu() {
       }
     });
   }
+}
+
+function setupLetterHoverEffects() {
+  const letters = document.querySelectorAll('.company-logo .letter');
+  const letterStates = {};
+  const animationFrames = {};
+  
+  // Initialize letter states
+  letters.forEach((letter, index) => {
+    letterStates[index] = {
+      isHovered: false,
+      proximity: 0,
+      targetY: 0,
+      targetZ: 20,
+      targetRotateX: 0,
+      targetRotateY: 0,
+      currentY: 0,
+      currentZ: 20,
+      currentRotateX: 0,
+      currentRotateY: 0,
+      element: letter
+    };
+  });
+  
+  // Mouse move handler for proximity detection
+  function handleMouseMove(e) {
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+    
+    letters.forEach((letter, index) => {
+      const rect = letter.getBoundingClientRect();
+      const letterCenterX = rect.left + rect.width / 2;
+      const letterCenterY = rect.top + rect.height / 2;
+      
+      // Calculate distance from cursor to letter center
+      const distance = Math.sqrt(
+        Math.pow(mouseX - letterCenterX, 2) + Math.pow(mouseY - letterCenterY, 2)
+      );
+      
+      // Calculate proximity (0 to 1, where 1 is very close)
+      const maxDistance = 150; // Maximum distance for effect
+      const proximity = Math.max(0, 1 - (distance / maxDistance));
+      
+      // Calculate tilt based on cursor position relative to letter
+      const relativeX = (mouseX - letterCenterX) / (rect.width / 2);
+      const relativeY = (mouseY - letterCenterY) / (rect.height / 2);
+      
+      // Update letter state
+      letterStates[index].proximity = proximity;
+      letterStates[index].targetY = proximity * -15; // Float up
+      letterStates[index].targetZ = 20 + proximity * 15; // Move forward
+      letterStates[index].targetRotateX = proximity * -12 * Math.max(-1, Math.min(1, relativeY)); // Tilt based on Y position
+      
+      // Add slight rotation based on X position for more dynamic effect
+      const rotateY = proximity * 5 * Math.max(-1, Math.min(1, relativeX));
+      letterStates[index].targetRotateY = rotateY;
+      
+    });
+  }
+  
+  // Smooth animation function
+  function animateLetters() {
+    let hasMovement = false;
+    
+    letters.forEach((letter, index) => {
+      const state = letterStates[index];
+      
+      // Smooth interpolation using easing
+      const easeFactor = 0.15; // Lower = smoother, higher = snappier
+      
+      const prevY = state.currentY;
+      const prevZ = state.currentZ;
+      const prevRotateX = state.currentRotateX;
+      const prevRotateY = state.currentRotateY;
+      
+      state.currentY += (state.targetY - state.currentY) * easeFactor;
+      state.currentZ += (state.targetZ - state.currentZ) * easeFactor;
+      state.currentRotateX += (state.targetRotateX - state.currentRotateX) * easeFactor;
+      state.currentRotateY += (state.targetRotateY - state.currentRotateY) * easeFactor;
+      
+      // Check if there's any movement
+      if (Math.abs(state.currentY - prevY) > 0.01 || 
+          Math.abs(state.currentZ - prevZ) > 0.01 ||
+          Math.abs(state.currentRotateX - prevRotateX) > 0.01 ||
+          Math.abs(state.currentRotateY - prevRotateY) > 0.01) {
+        hasMovement = true;
+      }
+      
+      // Apply transforms
+      letter.style.transform = `
+        translateY(${state.currentY}px) 
+        translateZ(${state.currentZ}px) 
+        rotateX(${state.currentRotateX}deg)
+        rotateY(${state.currentRotateY}deg)
+      `;
+      
+      // Update text shadow based on proximity - more focused shadows
+      const shadowIntensity = 0.6 + state.proximity * 0.3;
+      const shadowBlur = 8 + state.proximity * 12;
+      const shadowSpread = 2 + state.proximity * 4;
+      
+      letter.style.textShadow = `
+        0 ${shadowSpread}px ${shadowSpread * 2}px rgba(0, 0, 0, ${shadowIntensity}),
+        0 ${shadowSpread * 1.5}px ${shadowSpread * 3}px rgba(0, 0, 0, ${shadowIntensity * 0.6})
+      `;
+    });
+    
+    // Continue animation
+    animationFrames.current = requestAnimationFrame(animateLetters);
+  }
+  
+  // Start animation loop
+  animateLetters();
+  
+  // Add mouse move listener
+  document.addEventListener('mousemove', handleMouseMove);
+  
+  // Clean up on page unload
+  window.addEventListener('beforeunload', () => {
+    if (animationFrames.current) {
+      cancelAnimationFrame(animationFrames.current);
+    }
+    document.removeEventListener('mousemove', handleMouseMove);
+  });
 }
 
 function animateGarageDoor() {

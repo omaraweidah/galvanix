@@ -111,9 +111,14 @@ body {
   position: relative;
 }
 
+#hero.section {
+  background: transparent !important;
+  padding: 0;
+}
+
 /* Hero Section */
 #hero {
-  background: transparent;
+  background: transparent !important;
   width: 100%;
   height: 100vh;
   position: relative;
@@ -123,6 +128,9 @@ body {
   justify-content: center;
   padding: 0; /* Remove padding for hero */
   z-index: 10; /* Ensure it's above the 3D scene */
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
 }
 
 .hero-content {
@@ -132,15 +140,13 @@ body {
   padding: 0 1rem;
   text-align: center;
   z-index: 20; /* Ensure content is above everything */
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
 }
 
-.logo-container {
-  background: rgba(245, 245, 245, 0.95);
-  padding: clamp(1.5rem, 4vw, 2.5rem);
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-  border: 2px solid #0f5f5f;
-  box-shadow: 0 16px 32px rgba(15, 95, 95, 0.3);
+.floating-logo {
   position: relative;
   z-index: 25;
   text-align: center;
@@ -151,6 +157,11 @@ body {
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
 }
 
 .company-logo {
@@ -159,22 +170,68 @@ body {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-align: center;
-  color: #0f5f5f;
+  color: #ffffff;
   margin-bottom: 0.5rem;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow: visible;
+  text-overflow: visible;
+  text-shadow: 
+    0 0 20px rgba(0, 0, 0, 0.8),
+    0 0 40px rgba(0, 0, 0, 0.6),
+    0 0 60px rgba(0, 0, 0, 0.4),
+    0 4px 8px rgba(0, 0, 0, 0.9);
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.7));
+  transform: translateZ(20px);
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.company-logo .letter {
+  display: inline-block;
+  transform-origin: center bottom;
+  will-change: transform;
+  cursor: pointer;
+  /* Initial state - will be animated by JavaScript */
+  transform: translateY(0) translateZ(20px) rotateX(0deg) rotateY(0deg);
+  text-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.6),
+    0 3px 6px rgba(0, 0, 0, 0.4);
+  /* Prevent shadow bleeding to adjacent letters */
+  isolation: isolate;
+  contain: layout style paint;
+  position: relative;
+  z-index: 1;
 }
 
 /* Base tagline styles */
 .tagline {
   font-size: clamp(1rem, 3vw, 1.2rem);
-  color: #1a6b6b;
+  color: #ffffff;
   text-align: center;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow: visible;
+  text-overflow: visible;
   font-weight: 500;
+  text-shadow: 
+    0 0 15px rgba(0, 0, 0, 0.7),
+    0 0 30px rgba(0, 0, 0, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.8);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
+  transform: translateZ(15px);
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease-out, text-shadow 0.2s ease-out;
+  will-change: transform;
+}
+
+.tagline:hover {
+  transform: translateZ(25px) translateY(-5px);
+  text-shadow: 
+    0 0 20px rgba(0, 0, 0, 0.8),
+    0 0 40px rgba(0, 0, 0, 0.6),
+    0 4px 8px rgba(0, 0, 0, 0.9);
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.7));
 }
 
 /* Mobile/Desktop tagline visibility - REMOVED - using single responsive tagline */
@@ -483,7 +540,7 @@ body {
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-  .logo-container {
+  .floating-logo {
     padding: 2rem;
   }
 }
@@ -512,11 +569,9 @@ body {
     font-size: clamp(0.8rem, 2.2vw, 1rem);
   }
 
-  .logo-container {
+  .floating-logo {
     padding: 1.2rem;
     margin: 0 0.5rem;
-    background: rgba(245, 245, 245, 0.95);
-    backdrop-filter: blur(10px);
   }
 
   /* Mobile Navigation */
@@ -624,9 +679,6 @@ body {
 
   /* Removed conflicting .tagline rule - using responsive tagline system above */
 
-  .logo-container {
-    padding: 1rem;
-  }
 }
 
 /* Header styles for mobile */
@@ -666,13 +718,6 @@ body {
     font-size: clamp(0.8rem, 2.2vw, 1rem);
   }
 
-  .logo-container {
-    padding: 1.2rem;
-  }
-
-  .logo-container {
-    padding: 1.2rem;
-  }
 }
 
 @media (max-width: 480px) {
@@ -685,11 +730,7 @@ body {
     font-size: clamp(0.7rem, 2vw, 0.9rem);
   }
 
-  .logo-container {
-    padding: 1rem;
-  }
-
-  .logo-container {
+  .floating-logo {
     padding: 1rem;
   }
 }
@@ -704,11 +745,7 @@ body {
     font-size: clamp(0.6rem, 1.8vw, 0.8rem);
   }
 
-  .logo-container {
-    padding: 0.8rem;
-  }
-
-  .logo-container {
+  .floating-logo {
     padding: 0.8rem;
   }
 }
@@ -723,11 +760,7 @@ body {
     font-size: clamp(0.5rem, 1.5vw, 0.7rem);
   }
 
-  .logo-container {
-    padding: 0.6rem;
-  }
-
-  .logo-container {
+  .floating-logo {
     padding: 0.6rem;
   }
 }
