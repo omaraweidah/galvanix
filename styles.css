@@ -85,7 +85,6 @@ body {
   }
 }
 
-/* 3D Scene Container - Updated Teal Background */
 #scene-container {
   position: absolute;
   top: 0;
@@ -96,7 +95,6 @@ body {
   background: #008080 !important;
 }
 
-/* Content Sections */
 .content-sections {
   position: relative;
   z-index: 2;
@@ -116,18 +114,17 @@ body {
   padding: 0;
 }
 
-/* Hero Section */
 #hero {
   background: transparent !important;
   width: 100%;
   height: 100vh;
   position: relative;
   overflow: hidden;
-  display: flex; /* Use flex for better centering */
+  display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0; /* Remove padding for hero */
-  z-index: 10; /* Ensure it's above the 3D scene */
+  padding: 0;
+  z-index: 10;
   border: none;
   box-shadow: none;
   backdrop-filter: none;
@@ -139,7 +136,7 @@ body {
   max-width: 600px;
   padding: 0 1rem;
   text-align: center;
-  z-index: 20; /* Ensure content is above everything */
+  z-index: 20;
   background: transparent;
   border: none;
   box-shadow: none;
@@ -192,19 +189,16 @@ body {
   transform-origin: center bottom;
   will-change: transform;
   cursor: pointer;
-  /* Initial state - will be animated by JavaScript */
   transform: translateY(0) translateZ(20px) rotateX(0deg) rotateY(0deg);
   text-shadow: 
     0 2px 4px rgba(0, 0, 0, 0.6),
     0 3px 6px rgba(0, 0, 0, 0.4);
-  /* Prevent shadow bleeding to adjacent letters */
   isolation: isolate;
   contain: layout style paint;
   position: relative;
   z-index: 1;
 }
 
-/* Base tagline styles */
 .tagline {
   font-size: clamp(1rem, 3vw, 1.2rem);
   color: #ffffff;
@@ -234,13 +228,9 @@ body {
   filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.7));
 }
 
-/* Mobile/Desktop tagline visibility - REMOVED - using single responsive tagline */
 
-/* Responsive tagline styles - REMOVED - using comprehensive hero content scaling above */
 
-/* About Section removed - keeping only Company Profile */
 
-/* Contact Section */
 #contact {
   background: #f5f6f7;
   color: #1e1e1e;
@@ -372,7 +362,24 @@ body {
   color: #008080;
 }
 
-/* Sticky Header */
+.phone-section .phone-numbers {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.phone-section .phone-numbers a {
+  display: block;
+  color: #008080;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.phone-section .phone-numbers a:hover {
+  color: #006666;
+}
+
 .sticky-header {
   position: fixed;
   top: 0;
@@ -418,7 +425,6 @@ body {
   color: #1a3a3a;
 }
 
-/* Mobile Menu Toggle */
 .mobile-menu-toggle {
   display: none;
   flex-direction: column;
@@ -1309,13 +1315,12 @@ body {
 /* Gallery Navigation */
 .gallery-navigation {
   position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 20px;
+  right: 20px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: 0.5rem;
   z-index: 10;
 }
 
@@ -1351,21 +1356,6 @@ body {
   transform: scale(1.1);
 }
 
-.nav-progress {
-  width: 100px;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-.progress-bar {
-  height: 100%;
-  background: #1a3a3a;
-  border-radius: 2px;
-  transition: width 0.6s ease;
-  width: 0%;
-}
 
 /* Auto-scroll indicator */
 .gallery-slide.active {
@@ -1688,9 +1678,6 @@ body {
     font-size: 0.85rem;
   }
 
-  .nav-progress {
-    width: 80px;
-  }
 
   .nav-dot {
     width: 10px;
